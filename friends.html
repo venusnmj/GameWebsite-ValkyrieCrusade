@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <title> Add Comrades!</title>
+        <link rel="stylesheet" type="text/css" href="VC.css">
+         <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+        <script> 
+        var transactionList=[];
+            
+            function transactionItem(userName, userGender){
+                this.userName = userName;
+                this.userGender = userGender;
+            }
+        
+            function insertToCards(userName, userGender){
+                var cardData=`<td class="trow"><div class=container"><h2>${userName}</h2><p>${userGender}</p></div></td>`;
+                
+                return cardData;
+            }
+            
+            function submitTransaction(){
+                var name = $("#name").val();
+                var gender = $("#gender:checked").val();
+                var newTransactionItem = new transactionItem (name, gender);
+                transactionList.push(newTransactionItem);
+                $(".card").append(insertToCards(newTransactionItem.userName, newTransactionItem.gender));
+            }
+        
+            function storetoLocalStorage (name, transactionListArr){
+                localStorage.setItem(name, JSON.stringify(transactionListArr));
+            }
+            
+            function getFromLocalStorage(name){
+                var temp=JSON.parse(localStorage.getItem(name));
+                return temp;
+            }
+            
+            function loadCardDataTransactions(transactionListArr){
+                for(var i=0; i<transactionListArr.length; i++){
+                    $(".card").append(insertToCards(transactionListArr[i].userName, transactionListArr[i].userGender));
+                }
+            }
+            
+            $(document).ready(function(){
+                console.log("ready");
+                if(localStorage.getItem("firstTransaction")!=null){
+                    transactionList=getFromLocalStorage("firstTransaction");
+                    loadCardDataTransactions(transactionList);
+                }
+                $("#submit").on('click',function(){
+                    submitTransaction();
+                    storetoLocalStorage("firstTransaction", transactionList);
+                }); 
+            })
+            
+        </script>
+    </head>
+    <body class="comrades">
+        
+        <nav>
+<ul>
+    <li><a href="index.html" target="_blank">Home</a></li>
+    <li><a href="kingdom.html" target="_blank">Kingdom</a></li>
+    <li><a href="cards.html" target="_blank">Cards</a></li>
+    <li><a href="gallery.html" target="_blank">Gallery</a></li>
+        <li class="active"><a href="friends.html" target="_blank">Comrades</a></li>
+</ul>
+</nav>
+        
+        
+ <div class="toalign">     
+    <form>    
+<p>Type in your username!</p>    
+<input type="text" id="name">
+    <br>
+      <input type="radio" name="gender" id="gender" value="male">  male <br>
+    <input type="radio" name="gender" id="gender" value="female"> female <br>
+    <input type="radio" name="gender" id="gender" value="other"> other <br>
+    <input type="submit" id="submit" value="submit">
+    <br>
+    </form>
+    <br>
+<div class="card">
+        <img src="" style="width = 100%">
+<tr>
+    
+    </tr>
+        </div>        
+    </div>  
+    
+    </body>
+</html>
